@@ -1,15 +1,11 @@
 import React, { useState } from "react"
+import TodoForm from "./todo/TodoForm"
+import TodoItem from "./todo/TodoItem"
 
 function App() {
   const [todo, setTodo] = useState([]);
-  const [newTodo, setNewTodo] = useState('');
 
-  const onChangeNewTodo = e => {
-    setNewTodo(e.target.value)
-  }
-
-  const onSubmit = e => {
-    e.preventDefault();
+  const onSubmit = newTodo => {
     const nextTodo = [...todo, {title: newTodo, completed: false, id: Math.random()}];
     setTodo(nextTodo);
   }
@@ -21,18 +17,11 @@ function App() {
         {todo.length === 0 ? (
           <div>
             <div>할 일을 추가해보세요.</div>
-            <form onSubmit={onSubmit}>
-              <input value={newTodo} onChange={onChangeNewTodo}/>
-              <button>추가</button>
-            </form>
-            
+            <TodoForm onSubmit={onSubmit}/>
           </div>
         ) : <>
-              {todo.map(t => (<div key={t.id}>{t.title}</div>))}
-              <form onSubmit={onSubmit}>
-                <input value={newTodo} onChange={onChangeNewTodo}/>
-                <button>추가</button>
-              </form>
+              {todo.map((t, i) => (<TodoItem key={t.id} index={i} item={t} setTodo={setTodo}/>))}
+              <TodoForm onSubmit={onSubmit}/>
             </>
         }
       </div>
